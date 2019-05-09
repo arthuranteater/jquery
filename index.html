@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>JQuery Todo List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <style>
+        a.test {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="http://jquery.com/">Learn jQuery</a>
+    <h2 class='text-center'>Compartido</h2>
+    <h4 class='text-center'>share your schedule</h4>
+    <div class='name'>
+        <input placeholder='Insert name'></input>
+        <button>Create List</button>
+    </div>
+    <div class='todo'>
+        <input placeholder='learn jQuery'></input>
+        <span>at</span>
+        <select class='select-time'></select>
+        <span>to</span>
+        <select class='name'>
+        </select>
+        <button>Add to My List</button>
+    </div>
+    <div class="container">
+        <div class="row all">
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(() => {
+
+            const today = new Date()
+
+            $('.name').on(
+                'change keyup paste',
+                function (e) {
+                    const type = $(e.target).parent().attr('class')
+                    $(`.${type} button`).html(`Create To Do List for ${e.target.value}`)
+                }
+            )
+
+            $('.name button').click(e => {
+                const day = new Date()
+                const hrs = day.getHours()
+                const min = day.getMinutes()
+                //const time = `${hrs}:${min}`
+                //console.log('time', time)
+                let rows = ''
+                let selects = ''
+                for (i = hrs; i < 24; i++) {
+                    rows = rows.concat(`<div class='row ${i}'><div class='col'>${i}</div><div class='col ${i}'></div></div>`)
+                    selects = selects.concat(`<option class=${i} value=${i}>${i}</option>`)
+                }
+                const name = $('.name input').val()
+                $('.name').append(`<option class=${name} value=${name}>${name}</option>`)
+                $('.row.all').append(`<div class='col ${name}' ><h2>${name}</h2>${rows}</div>`)
+                $('.select-time').append(`${selects}`)
+            })
+
+            $('.todo').on(
+                'change keyup paste',
+                function (e) {
+                    const day = new Date()
+                    const hrs = day.getHours()
+                    //Returns the hour (0-23) in the specified date according to local time.
+                    const min = day.getMinutes()
+                    const time = `${hrs}:${min}`
+                    console.log('time', time)
+                    const type = $(e.target).parent().attr('class')
+                    const name = $('select').val()
+                    const todo = $('.todo input').val()
+                    $(`.${type} button`).html(`Add ${todo} to ${name} `)
+                }
+            )
+
+            $('.todo button').click(e => {
+                const todo = $('.todo input').val()
+                const name = $('select').val()
+                $(`.${name} ul`).append(`<li>${todo} - ${today}<li>`)
+            })
+
+            $('li').click(e => {
+                $(e.target).remove()
+                e.stopPropagation()
+            })
+
+            $('h2').click(e => {
+                const name = $(e.target).attr('class')
+                $(`.${name}`).remove()
+            })
+
+            $('a').click(e => {
+                e.preventDefault()
+                $('a').addClass('test')
+
+                console.log('A link was created')
+                console.log(`mouse position: x = ${e.pageX}, y = ${e.pageY}`)
+                console.log(`type = ${e.type}`)
+                console.log(`which = ${e.which}`)
+                console.log(`data = ${e.data}`)
+                console.log(`target = ${e.target}`)
+                console.log(`namespace = ${e.namespace}, ex. <NameOfnamespace>`)
+                console.log(`timestamp = ${e.timeStamp}`)
+
+            })
+
+        })
+
+
+    </script>
+</body>
+
+</html>
